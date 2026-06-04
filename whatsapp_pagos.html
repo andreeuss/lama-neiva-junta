@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>WhatsApp Pagos · LAMA Neiva 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A0A0A;--surface:#111;--card:#161616;--card2:#1c1c1c;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);
+  --fire:#E8401C;--gold:#F5A200;--green:#25D366;--green2:#128C7E;
+  --text:#F0F0F0;--muted:#777;--faint:#444;
+  --fd:'Bebas Neue',sans-serif;--fc:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+  --r:10px;--r2:6px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;min-height:100vh;}
+
+.header{background:var(--surface);border-bottom:2px solid var(--green);padding:16px 28px;}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.header-brand{display:flex;align-items:center;gap:14px;}
+.header-img{height:48px;width:auto;filter:drop-shadow(0 0 10px rgba(245,162,0,.4));}
+.header-bull{height:42px;width:auto;filter:drop-shadow(0 0 8px rgba(37,211,102,.4));}
+.header-txt h1{font-family:var(--fd);font-size:20px;letter-spacing:3px;}
+.header-txt p{font-family:var(--fc);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+
+.stats{background:var(--card);border-bottom:1px solid var(--border);padding:12px 28px;}
+.stats-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.stat{display:flex;align-items:center;gap:8px;font-family:var(--fc);font-size:13px;}
+.stat-num{font-family:var(--fd);font-size:22px;line-height:1;}
+.stat-sent .stat-num{color:var(--green);}
+.stat-pending .stat-num{color:var(--gold);}
+.stat-total .stat-num{color:var(--fire);}
+.progress-wrap{flex:1;min-width:200px;}
+.progress-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s;}
+.progress-txt{font-family:var(--fc);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.5px;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:22px 28px 60px;}
+.fireline{height:2px;background:linear-gradient(90deg,transparent,var(--green),var(--gold),var(--green),transparent);margin:0 0 20px;border-radius:2px;opacity:.5;}
+
+.msg-preview{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:18px;}
+.msg-title{font-family:var(--fc);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.msg-bubble{background:#1f2c33;border-radius:8px 8px 8px 0;padding:12px 14px;font-size:13px;line-height:1.7;color:#e9edef;max-width:500px;white-space:pre-wrap;border:1px solid rgba(255,255,255,.05);}
+
+.inst{background:rgba(37,211,102,.05);border:1px solid rgba(37,211,102,.18);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;}
+.inst-title{font-family:var(--fc);font-size:11px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.inst-steps{display:flex;flex-direction:column;gap:5px;}
+.inst-step{display:flex;gap:10px;font-size:13px;color:var(--muted);}
+.inst-n{font-family:var(--fd);font-size:16px;color:var(--green);line-height:1;flex-shrink:0;width:16px;}
+
+.grid-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.grid-title{font-family:var(--fc);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.btn-all{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:var(--r2);padding:8px 16px;font-family:var(--fc);font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:background .2s;}
+.btn-all:hover{background:var(--green2);}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+.pago-card{background:var(--card);border:1px solid rgba(37,211,102,.2);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .15s;}
+.pago-card:hover{border-color:rgba(37,211,102,.4);transform:translateY(-1px);}
+.pago-card.sent{border-color:rgba(37,211,102,.5);background:#0c1a0e;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.card-num{font-family:var(--fd);font-size:20px;color:var(--green);line-height:1;flex-shrink:0;}
+.card-info{flex:1;}
+.card-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;}
+.card-cap{font-family:var(--fc);font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+.card-phone{font-family:var(--fc);font-size:11px;color:var(--gold);margin-top:2px;}
+.card-valor{font-family:var(--fc);font-size:11px;color:var(--green);margin-top:2px;letter-spacing:.3px;}
+.sent-badge{font-family:var(--fc);font-size:10px;font-weight:700;color:var(--green);background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:#fff;border:none;border-radius:var(--r2);padding:9px 14px;font-family:var(--fc);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;text-decoration:none;transition:background .2s;width:100%;}
+.btn-wa:hover{background:var(--green2);}
+.btn-wa.done{background:rgba(37,211,102,.12);color:var(--green);border:1px solid rgba(37,211,102,.25);}
+.btn-wa svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;}
+
+/* LOADER DEL CSV */
+#loaderPagos{display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px 0;}
+.ld-ring{width:40px;height:40px;border:3px solid rgba(255,255,255,.07);border-top-color:var(--green);border-radius:50%;animation:spin .85s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ld-txt{font-family:var(--fd);font-size:13px;letter-spacing:2px;color:var(--muted);}
+
+footer{text-align:center;padding:24px;font-family:var(--fc);font-size:11px;color:var(--faint);border-top:1px solid var(--border);letter-spacing:.5px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" style="position:fixed;inset:0;background:#0A0A0A;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;gap:20px;">
+  <img src="Logo_LAMA_Neiva.jpeg" style="height:80px;filter:drop-shadow(0 0 14px rgba(245,162,0,.5));" onerror="this.style.display='none'" alt="LAMA">
+  <div style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:4px;color:#F0F0F0;">ACCESO RESTRINGIDO</div>
+  <div style="font-family:Barlow Condensed,sans-serif;font-size:13px;color:#777;letter-spacing:1px;">Confirmaciones de pago · LAMA Neiva 2026</div>
+  <div style="display:flex;flex-direction:column;gap:10px;width:280px;">
+    <input id="pinInput" type="password" placeholder="Ingresa la clave de acceso"
+      style="background:#161616;color:#F0F0F0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 16px;font-size:14px;font-family:Barlow,sans-serif;outline:none;text-align:center;letter-spacing:4px;"
+      onkeydown="if(event.key==='Enter')checkPin()">
+    <button onclick="checkPin()"
+      style="background:#25D366;color:#fff;border:none;border-radius:8px;padding:12px;font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">
+      INGRESAR
+    </button>
+    <div id="pinError" style="color:#E74C3C;font-size:12px;text-align:center;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px;display:none;">
+      ⚠️ Clave incorrecta. Intenta de nuevo.
+    </div>
+  </div>
+  <img src="Barcino_negro.png" style="height:50px;opacity:.4;margin-top:10px;" onerror="this.style.display='none'" alt="Barcino">
+</div>
+
+<script>
+function checkPin(){
+  var val=document.getElementById('pinInput').value;
+  if(val==='12345'){
+    document.getElementById('loginScreen').style.display='none';
+    sessionStorage.setItem('lama_auth','ok');
+    iniciarCarga();
+  }else{
+    document.getElementById('pinError').style.display='block';
+    document.getElementById('pinInput').value='';
+    document.getElementById('pinInput').focus();
+  }
+}
+if(sessionStorage.getItem('lama_auth')==='ok'){
+  document.addEventListener('DOMContentLoaded',function(){
+    var s=document.getElementById('loginScreen');
+    if(s)s.style.display='none';
+    iniciarCarga();
+  });
+}
+</script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <img class="header-img" src="Logo_LAMA_Neiva.jpeg" onerror="this.style.display='none'" alt="LAMA">
+      <div class="header-txt">
+        <h1>CONFIRMACIÓN DE PAGO</h1>
+        <p>Mensajes a inscritos con pago confirmado · LAMA Neiva 2026</p>
+      </div>
+    </div>
+    <img class="header-bull" src="Barcino_negro.png" onerror="this.style.display='none'" alt="Barcino">
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat stat-total"><div class="stat-num" id="stTotal">0</div><div class="stat-lbl">Total pagaron</div></div>
+    <div class="stat stat-sent"><div class="stat-num" id="stSent">0</div><div class="stat-lbl">Mensajes enviados</div></div>
+    <div class="stat stat-pending"><div class="stat-num" id="stPend">0</div><div class="stat-lbl">Pendientes</div></div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+      <div class="progress-txt" id="progTxt">0% completado</div>
+    </div>
+    <button onclick="recargarPagos()" style="background:transparent;color:var(--gold);border:1px solid rgba(245,162,0,.4);border-radius:6px;padding:6px 14px;font-family:Barlow Condensed,sans-serif;font-size:12px;cursor:pointer;letter-spacing:.5px;">↻ Actualizar lista</button>
+  </div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="wrap">
+  <div class="fireline"></div>
+
+  <!-- INSTRUCCIONES -->
+  <div class="inst">
+    <div class="inst-title">Cómo funciona</div>
+    <div class="inst-steps">
+      <div class="inst-step"><div class="inst-n">1</div><div>La lista se carga automáticamente desde Google Sheets con todos los que han pagado.</div></div>
+      <div class="inst-step"><div class="inst-n">2</div><div>Haz clic en el botón verde de cada inscrito — abre WhatsApp con el mensaje de confirmación listo.</div></div>
+      <div class="inst-step"><div class="inst-n">3</div><div>Solo presiona <strong>Enviar</strong>. El progreso queda guardado automáticamente.</div></div>
+      <div class="inst-step"><div class="inst-n">4</div><div>Cada vez que llegue un pago nuevo, clic en <strong>Actualizar lista</strong> para ver los nuevos.</div></div>
+    </div>
+  </div>
+
+  <!-- PREVIEW MENSAJE -->
+  <div class="msg-preview">
+    <div class="msg-title">Vista previa del mensaje de confirmación de pago</div>
+    <div class="msg-bubble" id="msgPreview"></div>
+  </div>
+
+  <!-- LOADER -->
+  <div id="loaderPagos">
+    <div class="ld-ring"></div>
+    <div class="ld-txt">CARGANDO PAGOS DESDE GOOGLE SHEETS...</div>
+  </div>
+
+  <!-- GRID -->
+  <div id="mainContent" style="display:none;">
+    <div class="grid-hd">
+      <div class="grid-title">Inscritos con pago confirmado <span id="countCards" style="color:var(--green);">(0)</span></div>
+      <button class="btn-all" onclick="abrirTodos()">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5 19.79 19.79 0 0 1 1.61 1a2 2 0 0 1 2-.18l3 .18a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 14.92z"/></svg>
+        Abrir todos los pendientes
+      </button>
+    </div>
+    <div class="cards" id="cardsGrid"></div>
+  </div>
+</div>
+
+<footer>Panel Junta Directiva · <span style="color:var(--green)">Confirmaciones de pago</span> · <span style="color:var(--fire)">11° Aniversario LAMA Neiva 2026</span></footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────
+const PUB_ID='2PACX-1vTv_jhY_tpW-MXHzZ0hLb_XqJTOlByhwAuB7Sn6gmAJfzlvQuf1557IkCcdl5CVc_IRda8pT4hQzrF1';
+const INSC_URL=()=>'https://docs.google.com/spreadsheets/d/e/'+PUB_ID+'/pub?gid=42408048&single=true&output=csv&t='+Date.now();
+const PAGOS_URL=()=>'https://docs.google.com/spreadsheets/d/e/'+PUB_ID+'/pub?gid=724644878&single=true&output=csv&t='+Date.now();
+
+// ── MENSAJE CONFIRMACIÓN DE PAGO ──────────────────────────────────
+const MENSAJE_PAGO=`🏍️ ¡Hola [NOMBRE]!
+
+✅ ¡Tu pago ha sido confirmado! Gracias por completar tu inscripción al *11° Aniversario LAMA Neiva 2026*.
+
+Ya estás oficialmente en la lista. Aquí encuentras toda la información del evento, programa y detalles:
+👉 https://andreeuss.github.io/lama-neiva/
+
+📅 Fechas: 17, 18 y 19 de Julio de 2026
+📍 Lugar: San Agustín, Huila
+🏨 Hotel: Yalconia
+
+¡11 años rodando como familia! 🤘
+L.A.M.A Neiva — Latin American Motorcycle Assoc`;
+
+document.getElementById('msgPreview').textContent=MENSAJE_PAGO.replace('[NOMBRE]','Nombre del inscrito');
+
+// ── DATOS ─────────────────────────────────────────────────────────
+let PAGADORES=[];
+
+function normCap(c){
+  if(!c)return'';
+  const s=c.toLowerCase().replace(/lama\s*/i,'').trim();
+  const M={neiva:'Neiva',ibague:'Ibague','ibagué':'Ibague',mocoa:'Mocoa',floridablanca:'Floridablanca',pereira:'Pereira',bogota:'Bogota','bogotá':'Bogota',bucaramanga:'Bucaramanga',valled:'Valled',medellin:'Medellín','medellín':'Medellín'};
+  for(const k of Object.keys(M))if(s.includes(k))return M[k];
+  return c.trim();
+}
+
+function parseCSV(text){
+  const lines=text.split('\n').filter(l=>l.trim());const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const cols=[];let cur='',inQ=false;
+    for(let j=0;j<lines[i].length;j++){const ch=lines[i][j];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}else{cur+=ch;}}
+    cols.push(cur.trim());
+    if(cols.length>=1&&cols[0])rows.push(cols);
+  }
+  return rows;
+}
+
+// Storage enviados
+function getSent(){try{return JSON.parse(localStorage.getItem('lama_pagos_sent')||'[]');}catch{return[];}}
+function addSent(k){const s=getSent();if(!s.includes(k)){s.push(k);localStorage.setItem('lama_pagos_sent',JSON.stringify(s));}updateStats();}
+function isSent(k){return getSent().includes(k);}
+
+// ── CARGAR DATOS ──────────────────────────────────────────────────
+async function iniciarCarga(){
+  document.getElementById('loaderPagos').style.display='flex';
+  document.getElementById('mainContent').style.display='none';
+  try{
+    // Cargar pagos e inscripciones en paralelo
+    const [rP,rI]=await Promise.all([fetch(PAGOS_URL()),fetch(INSC_URL())]);
+    const pagosRaw=parseCSV(await rP.text());
+    const inscRaw=parseCSV(await rI.text());
+
+    // Cruzar: buscar teléfono del inscrito por nombre similar al del pagador
+    PAGADORES=pagosRaw.map((p,idx)=>{
+      const nombrePago=(p[0]||'').toUpperCase().trim();
+      const cap=normCap(p[1]||'');
+      const valStr=(p[2]||'').replace(/[$\s.]/g,'').replace(/,/g,'');
+      const valor=parseInt(valStr)||0;
+      const fecha=p[3]||'';
+
+      // Buscar teléfono en la hoja de inscritos por coincidencia de nombre
+      const palabraPago=nombrePago.split(' ')[0];
+      const match=inscRaw.find(i=>{
+        const nombreInsc=(i[1]||'').toUpperCase();
+        return nombreInsc.includes(palabraPago)||palabraPago.includes(nombreInsc.split(' ')[0]);
+      });
+      const tel=match?match[2].replace(/\D/g,''):'';
+
+      return{idx:idx+1,nombre:p[0]||'',capitulo:cap,valor,fecha,tel};
+    }).filter(p=>p.nombre);
+
+    document.getElementById('loaderPagos').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+    renderCards();
+    updateStats();
+  }catch(e){
+    document.getElementById('loaderPagos').innerHTML=
+      '<div style="color:#e87171;font-size:13px;text-align:center;padding:20px;">⚠️ Error cargando datos: '+e.message+'<br><br><button onclick="iniciarCarga()" style="background:var(--fire);color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:Barlow Condensed,sans-serif;">Reintentar</button></div>';
+  }
+}
+
+function recargarPagos(){iniciarCarga();}
+
+// ── BUILD LINK ────────────────────────────────────────────────────
+function buildLink(p){
+  const primerNombre=p.nombre.trim().split(' ')[0];
+  const msg=MENSAJE_PAGO.replace('[NOMBRE]',primerNombre);
+  let tel=p.tel.replace(/\D/g,'');
+  if(tel.length===10&&tel.startsWith('3'))tel='57'+tel;
+  if(!tel||tel.length<10)return null;
+  return'https://wa.me/'+tel+'?text='+encodeURIComponent(msg);
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderCards(){
+  const fmt=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
+  document.getElementById('countCards').textContent='('+PAGADORES.length+')';
+  document.getElementById('cardsGrid').innerHTML=PAGADORES.map((p,i)=>{
+    const key=p.nombre+'_'+p.idx;
+    const enviado=isSent(key);
+    const link=buildLink(p);
+    const primerNombre=p.nombre.trim().split(' ')[0];
+    return`<div class="pago-card${enviado?' sent':''}" id="pc${i}">
+      <div class="card-top">
+        <div class="card-num">${String(p.idx).padStart(2,'0')}</div>
+        <div class="card-info">
+          <div class="card-name">${p.nombre}</div>
+          <div class="card-cap">${p.capitulo||'—'}</div>
+          <div class="card-phone">📱 ${p.tel||'Sin teléfono registrado'}</div>
+          <div class="card-valor">💰 ${fmt(p.valor)} · ${p.fecha}</div>
+        </div>
+        ${enviado?'<div class="sent-badge">✓ Enviado</div>':''}
+      </div>
+      ${link
+        ?`<a class="btn-wa${enviado?' done':''}" href="${link}" target="_blank"
+            onclick="setTimeout(()=>{addSent('${key}');renderCards();},1500)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.1 1.504 5.832L.057 23.5l5.806-1.522A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.37l-.359-.214-3.724.976.994-3.632-.234-.373A9.818 9.818 0 1 1 12 21.818z"/></svg>
+            ${enviado?'✓ Enviado — Reenviar':'Enviar confirmación a '+primerNombre}
+          </a>`
+        :`<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;color:var(--faint);text-align:center;padding:8px;border:1px dashed var(--faint);border-radius:6px;">⚠️ Teléfono no encontrado en inscripciones</div>`
+      }
+    </div>`;
+  }).join('');
+}
+
+function updateStats(){
+  const total=PAGADORES.length;
+  const sent=PAGADORES.filter(p=>isSent(p.nombre+'_'+p.idx)).length;
+  const pct=total?Math.round(sent/total*100):0;
+  document.getElementById('stTotal').textContent=total;
+  document.getElementById('stSent').textContent=sent;
+  document.getElementById('stPend').textContent=total-sent;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progTxt').textContent=pct+'% completado ('+sent+' de '+total+')';
+}
+
+function abrirTodos(){
+  const pend=PAGADORES.filter(p=>!isSent(p.nombre+'_'+p.idx)&&buildLink(p));
+  if(!pend.length){alert('¡Todos los mensajes ya fueron enviados!');return;}
+  if(!confirm('Se abrirán '+pend.length+' pestañas de WhatsApp.\n¿Continuar?\n\nTip: Permite pop-ups en tu navegador.'))return;
+  pend.forEach((p,i)=>{
+    setTimeout(()=>{
+      window.open(buildLink(p),'_blank');
+      addSent(p.nombre+'_'+p.idx);
+    },i*900);
+  });
+  setTimeout(renderCards,pend.length*900+500);
+}
+</script>
+</body>
+</html>

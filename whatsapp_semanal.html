@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Semanal · LAMA Neiva 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A0A0A;--surface:#111;--card:#161616;--card2:#1c1c1c;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);
+  --fire:#E8401C;--gold:#F5A200;--green:#25D366;--green2:#128C7E;
+  --text:#F0F0F0;--muted:#777;--faint:#444;
+  --fd:'Bebas Neue',sans-serif;--fc:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+  --r:10px;--r2:6px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:2px solid var(--fire);padding:16px 28px;}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.header-brand{display:flex;align-items:center;gap:14px;}
+.header-img{height:48px;width:auto;filter:drop-shadow(0 0 10px rgba(245,162,0,.4));}
+.header-bull{height:42px;width:auto;filter:drop-shadow(0 0 8px rgba(232,64,28,.5));}
+.header-txt h1{font-family:var(--fd);font-size:20px;letter-spacing:3px;}
+.header-txt p{font-family:var(--fc);font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+
+/* SEMANA SELECTOR */
+.semana-bar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 28px;}
+.semana-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.semana-lbl{font-family:var(--fc);font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+input[type="date"]{background:var(--card2);color:var(--text);border:1px solid var(--border2);border-radius:var(--r2);padding:6px 10px;font-family:var(--fb);font-size:13px;outline:none;}
+input[type="date"]:focus{border-color:var(--gold);}
+.btn-cargar{display:inline-flex;align-items:center;gap:6px;background:var(--fire);color:#fff;border:none;border-radius:var(--r2);padding:8px 18px;font-family:var(--fc);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:opacity .2s;}
+.btn-cargar:hover{opacity:.85;}
+.btn-cargar svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.semana-info{font-family:var(--fc);font-size:12px;color:var(--gold);letter-spacing:.5px;}
+
+/* STATS */
+.stats{background:var(--card2);border-bottom:1px solid var(--border);padding:10px 28px;}
+.stats-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.stat{display:flex;align-items:baseline;gap:6px;}
+.stat-num{font-family:var(--fd);font-size:24px;line-height:1;}
+.stat-lbl{font-family:var(--fc);font-size:11px;color:var(--muted);letter-spacing:.5px;}
+.stat-nuevos .stat-num{color:var(--fire);}
+.stat-sent .stat-num{color:var(--green);}
+.stat-pend .stat-num{color:var(--gold);}
+.progress-wrap{flex:1;min-width:180px;}
+.progress-bar{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s;}
+.progress-txt{font-family:var(--fc);font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* LOADER */
+#loader{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0;}
+.ld-ring{width:40px;height:40px;border:3px solid rgba(255,255,255,.07);border-top-color:var(--fire);border-radius:50%;animation:spin .85s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ld-txt{font-family:var(--fc);font-size:13px;letter-spacing:2px;color:var(--muted);}
+
+/* WRAP */
+.wrap{max-width:1100px;margin:0 auto;padding:20px 28px 60px;}
+.fireline{height:2px;background:linear-gradient(90deg,transparent,var(--fire),var(--gold),var(--fire),transparent);margin:0 0 20px;border-radius:2px;opacity:.5;}
+
+/* MSG PREVIEW */
+.msg-preview{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:18px;}
+.msg-preview-title{font-family:var(--fc);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.msg-bubble{background:#1f2c33;border-radius:8px 8px 8px 0;padding:12px 14px;font-size:13px;line-height:1.7;color:#e9edef;max-width:500px;white-space:pre-wrap;border:1px solid rgba(255,255,255,.05);}
+
+/* INSTRUCCIONES */
+.inst{background:rgba(37,211,102,.05);border:1px solid rgba(37,211,102,.18);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;}
+.inst-title{font-family:var(--fc);font-size:11px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.inst-steps{display:flex;flex-direction:column;gap:5px;}
+.inst-step{display:flex;gap:10px;font-size:13px;color:var(--muted);}
+.inst-n{font-family:var(--fd);font-size:16px;color:var(--green);line-height:1;flex-shrink:0;width:16px;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-title{font-family:var(--fd);font-size:20px;letter-spacing:2px;color:var(--faint);margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--faint);}
+
+/* GRID CONTROLES */
+.grid-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.grid-title{font-family:var(--fc);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.btn-all{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:var(--r2);padding:8px 16px;font-family:var(--fc);font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:background .2s;}
+.btn-all:hover{background:var(--green2);}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;}
+.inscrito-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .15s;}
+.inscrito-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.inscrito-card.sent{border-color:rgba(37,211,102,.3);background:#0c1a0e;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.card-num{font-family:var(--fd);font-size:20px;color:var(--faint);line-height:1;flex-shrink:0;}
+.card-num.nuevo{color:var(--fire);}
+.card-info{flex:1;}
+.card-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;}
+.card-cap{font-family:var(--fc);font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
+.card-phone{font-family:var(--fc);font-size:11px;color:var(--gold);margin-top:2px;}
+.card-fecha{font-family:var(--fc);font-size:10px;color:var(--faint);margin-top:2px;}
+.sent-badge{font-family:var(--fc);font-size:10px;font-weight:700;color:var(--green);background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.nuevo-badge{font-family:var(--fc);font-size:10px;font-weight:700;color:var(--fire);background:rgba(232,64,28,.1);border:1px solid rgba(232,64,28,.25);padding:2px 8px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:#fff;border:none;border-radius:var(--r2);padding:9px 14px;font-family:var(--fc);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;text-decoration:none;transition:background .2s;width:100%;}
+.btn-wa:hover{background:var(--green2);}
+.btn-wa.done{background:rgba(37,211,102,.12);color:var(--green);border:1px solid rgba(37,211,102,.25);}
+.btn-wa svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;}
+
+footer{text-align:center;padding:24px;font-family:var(--fc);font-size:11px;color:var(--faint);border-top:1px solid var(--border);letter-spacing:.5px;}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<div id="loginScreen" style="position:fixed;inset:0;background:#0A0A0A;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;gap:20px;"><img src="Logo_LAMA_Neiva.jpeg" style="height:80px;filter:drop-shadow(0 0 14px rgba(245,162,0,.5));" onerror="this.style.display='none'" alt="LAMA"><div style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:4px;color:#F0F0F0;">ACCESO RESTRINGIDO</div><div style="font-family:Barlow Condensed,sans-serif;font-size:13px;color:#777;letter-spacing:1px;">Panel Junta Directiva · LAMA Neiva 2026</div><div style="display:flex;flex-direction:column;gap:10px;width:280px;"><input id="pinInput" type="password" placeholder="Ingresa la clave de acceso" style="background:#161616;color:#F0F0F0;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 16px;font-size:14px;font-family:Barlow,sans-serif;outline:none;text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter'"')checkPin()"><button onclick="checkPin()" style="background:#E8401C;color:#fff;border:none;border-radius:8px;padding:12px;font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">INGRESAR</button><div id="pinError" style="color:#E74C3C;font-size:12px;text-align:center;font-family:Barlow Condensed,sans-serif;letter-spacing:.5px;display:none;">⚠️ Clave incorrecta. Intenta de nuevo.</div></div><img src="Barcino_negro.png" style="height:50px;opacity:.4;margin-top:10px;" onerror="this.style.display='none'" alt="Barcino"></div><script>function checkPin(){var val=document.getElementById("pinInput").value;if(val==="12345"){document.getElementById("loginScreen").style.display="none";sessionStorage.setItem("lama_auth","ok");}else{document.getElementById("pinError").style.display="block";document.getElementById("pinInput").value="";document.getElementById("pinInput").focus();}}if(sessionStorage.getItem("lama_auth")==="ok"){document.addEventListener("DOMContentLoaded",function(){var s=document.getElementById("loginScreen");if(s)s.style.display="none";});}</script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <img class="header-img" src="Logo_LAMA_Neiva.jpeg" onerror="this.style.display='none'" alt="LAMA">
+      <div class="header-txt">
+        <h1>WHATSAPP SEMANAL</h1>
+        <p>Nuevos inscritos · 11° Aniversario LAMA Neiva 2026</p>
+      </div>
+    </div>
+    <img class="header-bull" src="Barcino_negro.png" onerror="this.style.display='none'" alt="Barcino">
+  </div>
+</div>
+
+<!-- SELECTOR DE SEMANA -->
+<div class="semana-bar">
+  <div class="semana-inner">
+    <span class="semana-lbl">Semana desde:</span>
+    <input type="date" id="fechaDesde">
+    <span class="semana-lbl">hasta:</span>
+    <input type="date" id="fechaHasta">
+    <button class="btn-cargar" onclick="cargarSemana()">
+      <svg viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Cargar inscritos
+    </button>
+    <span class="semana-info" id="semanaInfo"></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat stat-nuevos"><div class="stat-num" id="stNuevos">0</div><div class="stat-lbl">Nuevos esta semana</div></div>
+    <div class="stat stat-sent"><div class="stat-num" id="stSent">0</div><div class="stat-lbl">Enviados</div></div>
+    <div class="stat stat-pend"><div class="stat-num" id="stPend">0</div><div class="stat-lbl">Pendientes</div></div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+      <div class="progress-txt" id="progTxt">0% completado</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-ring"></div>
+  <div class="ld-txt">CARGANDO DESDE GOOGLE SHEETS...</div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="wrap" id="mainContent" style="display:none;">
+  <div class="fireline"></div>
+
+  <!-- INSTRUCCIONES -->
+  <div class="inst">
+    <div class="inst-title">Cómo usar cada viernes</div>
+    <div class="inst-steps">
+      <div class="inst-step"><div class="inst-n">1</div><div>Selecciona las fechas de la semana (ej: lunes a jueves) y clic en <strong>Cargar inscritos</strong>.</div></div>
+      <div class="inst-step"><div class="inst-n">2</div><div>Aparecen solo los inscritos nuevos de esa semana con su botón de WhatsApp listo.</div></div>
+      <div class="inst-step"><div class="inst-n">3</div><div>Haz clic en el botón verde de cada uno — abre WhatsApp con el mensaje personalizado. Solo presiona <strong>Enviar</strong>.</div></div>
+      <div class="inst-step"><div class="inst-n">4</div><div>El progreso se guarda automáticamente. Las tarjetas enviadas se marcan en verde.</div></div>
+    </div>
+  </div>
+
+  <!-- PREVIEW MENSAJE -->
+  <div class="msg-preview">
+    <div class="msg-preview-title">Vista previa del mensaje</div>
+    <div class="msg-bubble" id="msgPreview"></div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid-hd">
+    <div class="grid-title">Inscritos nuevos <span id="countCards" style="color:var(--fire);">(0)</span></div>
+    <button class="btn-all" onclick="abrirTodos()">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.5 19.79 19.79 0 0 1 1.61 1a2 2 0 0 1 2-.18l3 .18a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 14.92z"/></svg>
+      Abrir todos los pendientes
+    </button>
+  </div>
+
+  <div id="cardsGrid" class="cards"></div>
+  <div id="emptyState" class="empty" style="display:none;">
+    <div class="empty-icon">📭</div>
+    <div class="empty-title">Sin inscritos nuevos</div>
+    <div class="empty-sub">No hay inscripciones en el rango de fechas seleccionado.</div>
+  </div>
+</div>
+
+<!-- ESTADO INICIAL -->
+<div id="initState" class="empty" style="padding:80px 20px;">
+  <div class="empty-icon">📅</div>
+  <div class="empty-title">Selecciona el rango de fechas</div>
+  <div class="empty-sub">Escoge desde y hasta qué fecha quieres ver los inscritos nuevos, luego clic en <strong style="color:var(--gold)">Cargar inscritos</strong>.</div>
+</div>
+
+<footer>Panel semanal · <span style="color:var(--fire)">11° Aniversario LAMA Neiva 2026</span> · L.A.M.A Neiva</footer>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────
+const PUB_ID = '2PACX-1vTv_jhY_tpW-MXHzZ0hLb_XqJTOlByhwAuB7Sn6gmAJfzlvQuf1557IkCcdl5CVc_IRda8pT4hQzrF1';
+const CSV_URL = () => 'https://docs.google.com/spreadsheets/d/e/' + PUB_ID + '/pub?gid=42408048&single=true&output=csv&t=' + Date.now();
+
+// ── MENSAJE ───────────────────────────────────────────────────────
+const MENSAJE = `🏍️ ¡Hola [NOMBRE]!
+Gracias por inscribirte a nuestro evento de L.A.M.A. Neiva en San Agustín! Hemos recibido correctamente tu registro. El siguiente paso es realizar el pago y enviarnos el comprobante. Estamos a tu disposición para orientarte y resolver cualquier duda que tengas sobre el evento. ¡Nos alegra contar contigo en esta gran experiencia! 🎉
+📅 Fechas: 17, 18 y 19 de Julio de 2026
+📍 Lugar: San Agustín, Huila
+🏨 Hotel: Yalconia
+¡11 años rodando como familia! 🤘 Nos vemos en la carretera.
+Para más información visita:
+👉 https://andreeuss.github.io/lama-neiva/
+L.A.M.A Neiva — Latin American Motorcycle Assoc`;
+
+document.getElementById('msgPreview').textContent = MENSAJE.replace('[NOMBRE]', 'Nombre del inscrito');
+
+// ── FECHAS DEFAULT (lunes y jueves de la semana actual) ───────────
+function setFechasDefault() {
+  const hoy = new Date();
+  const dia = hoy.getDay(); // 0=dom, 1=lun...
+  const lunes = new Date(hoy);
+  lunes.setDate(hoy.getDate() - (dia === 0 ? 6 : dia - 1));
+  const jueves = new Date(lunes);
+  jueves.setDate(lunes.getDate() + 3);
+  document.getElementById('fechaDesde').value = lunes.toISOString().split('T')[0];
+  document.getElementById('fechaHasta').value = jueves.toISOString().split('T')[0];
+}
+setFechasDefault();
+
+// ── PARSEAR CSV ───────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = []; let cur = '', inQ = false;
+    for (let j = 0; j < lines[i].length; j++) {
+      const ch = lines[i][j];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+    if (cols.length >= 8) {
+      // Parsear fecha dd/mm/yyyy hh:mm:ss
+      const partes = (cols[0] || '').split(' ')[0].split('/');
+      let fecha = null;
+      if (partes.length === 3) {
+        fecha = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
+      }
+      rows.push({
+        fecha,
+        fechaStr: (cols[0] || '').split(' ')[0],
+        nombre: cols[1] || '',
+        tel: cols[2] || '',
+        capitulo: cols[3] || '',
+        estatus: cols[4] || '',
+      });
+    }
+  }
+  return rows;
+}
+
+// ── STORAGE ENVIADOS ──────────────────────────────────────────────
+function getSent() { try { return JSON.parse(localStorage.getItem('lama_sent_semanal') || '[]'); } catch { return []; } }
+function addSent(key) { const s = getSent(); if (!s.includes(key)) { s.push(key); localStorage.setItem('lama_sent_semanal', JSON.stringify(s)); } updateStats(); }
+function isSent(key) { return getSent().includes(key); }
+
+// ── CARGAR SEMANA ─────────────────────────────────────────────────
+let INSCRITOS_SEMANA = [];
+
+async function cargarSemana() {
+  const desde = document.getElementById('fechaDesde').value;
+  const hasta = document.getElementById('fechaHasta').value;
+  if (!desde || !hasta) { alert('Selecciona ambas fechas'); return; }
+
+  const dDesde = new Date(desde + 'T00:00:00');
+  const dHasta = new Date(hasta + 'T23:59:59');
+
+  document.getElementById('loader').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('initState').style.display = 'none';
+
+  // Formatear etiqueta semana
+  const opts = { day: 'numeric', month: 'long' };
+  document.getElementById('semanaInfo').textContent =
+    dDesde.toLocaleDateString('es-CO', opts) + ' → ' + dHasta.toLocaleDateString('es-CO', opts);
+
+  try {
+    const r = await fetch(CSV_URL());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const text = await r.text();
+    const todos = parseCSV(text);
+
+    // Filtrar por rango de fechas
+    INSCRITOS_SEMANA = todos.filter(i => i.fecha && i.fecha >= dDesde && i.fecha <= dHasta);
+
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+
+    renderCards();
+    updateStats();
+
+  } catch (e) {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('initState').style.display = 'block';
+    document.getElementById('initState').innerHTML =
+      '<div class="empty-icon">⚠️</div>' +
+      '<div class="empty-title">Error al cargar</div>' +
+      '<div class="empty-sub">' + e.message + '<br><br>Verifica tu conexión a internet.</div>';
+  }
+}
+
+// ── BUILD LINK WHATSAPP ───────────────────────────────────────────
+function buildLink(inscrito) {
+  const primerNombre = inscrito.nombre.trim().split(' ')[0];
+  const msg = MENSAJE.replace('[NOMBRE]', primerNombre);
+  let tel = inscrito.tel.replace(/\D/g, '');
+  if (tel.length === 10 && tel.startsWith('3')) tel = '57' + tel;
+  return 'https://wa.me/' + tel + '?text=' + encodeURIComponent(msg);
+}
+
+// ── RENDER CARDS ──────────────────────────────────────────────────
+function renderCards() {
+  const grid = document.getElementById('cardsGrid');
+  const empty = document.getElementById('emptyState');
+
+  if (!INSCRITOS_SEMANA.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('countCards').textContent = '(0)';
+    return;
+  }
+
+  empty.style.display = 'none';
+  document.getElementById('countCards').textContent = '(' + INSCRITOS_SEMANA.length + ')';
+
+  grid.innerHTML = INSCRITOS_SEMANA.map((ins, idx) => {
+    const key = ins.nombre + '_' + ins.tel;
+    const enviado = isSent(key);
+    const primerNombre = ins.nombre.trim().split(' ')[0];
+    const link = buildLink(ins);
+    const num = idx + 1;
+
+    return `<div class="inscrito-card${enviado ? ' sent' : ''}" id="card_${idx}">
+      <div class="card-top">
+        <div class="card-num nuevo">${String(num).padStart(2,'0')}</div>
+        <div class="card-info">
+          <div class="card-name">${ins.nombre}</div>
+          <div class="card-cap">${ins.capitulo || '—'}</div>
+          <div class="card-phone">📱 ${ins.tel}</div>
+          <div class="card-fecha">📅 ${ins.fechaStr}</div>
+        </div>
+        ${enviado
+          ? '<div class="sent-badge">✓ Enviado</div>'
+          : '<div class="nuevo-badge">Nuevo</div>'}
+      </div>
+      <a class="btn-wa${enviado ? ' done' : ''}"
+         href="${link}" target="_blank"
+         onclick="setTimeout(()=>{addSent('${key}');document.getElementById('card_${idx}').classList.add('sent');renderCards();},1500)">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.1 1.504 5.832L.057 23.5l5.806-1.522A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.37l-.359-.214-3.724.976.994-3.632-.234-.373A9.818 9.818 0 1 1 12 21.818z"/></svg>
+        ${enviado ? '✓ Enviado — Reenviar' : 'Enviar a ' + primerNombre}
+      </a>
+    </div>`;
+  }).join('');
+}
+
+// ── UPDATE STATS ──────────────────────────────────────────────────
+function updateStats() {
+  const total = INSCRITOS_SEMANA.length;
+  const sent = INSCRITOS_SEMANA.filter(i => isSent(i.nombre + '_' + i.tel)).length;
+  const pend = total - sent;
+  const pct = total ? Math.round(sent / total * 100) : 0;
+  document.getElementById('stNuevos').textContent = total;
+  document.getElementById('stSent').textContent = sent;
+  document.getElementById('stPend').textContent = pend;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = pct + '% completado (' + sent + ' de ' + total + ')';
+}
+
+// ── ABRIR TODOS ───────────────────────────────────────────────────
+function abrirTodos() {
+  const pendientes = INSCRITOS_SEMANA.filter(i => !isSent(i.nombre + '_' + i.tel));
+  if (!pendientes.length) { alert('¡Todos los mensajes de esta semana ya fueron enviados!'); return; }
+  if (!confirm('Se abrirán ' + pendientes.length + ' pestañas de WhatsApp.\n¿Continuar?\n\nTip: Permite pop-ups en tu navegador.')) return;
+  pendientes.forEach((ins, idx) => {
+    setTimeout(() => {
+      window.open(buildLink(ins), '_blank');
+      addSent(ins.nombre + '_' + ins.tel);
+    }, idx * 900);
+  });
+  setTimeout(renderCards, pendientes.length * 900 + 500);
+}
+</script>
+</body>
+</html>
